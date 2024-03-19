@@ -70,6 +70,7 @@ public class SistemaCompleto {
                 areaTotalObjetos += areaObjeto;
             } else if (!objeto.equals("n")) {
                 System.out.println("OPÇÃO INVALIDA! Digite 's' para SIM ou 'n' para NÃO.");
+                objetos();
             }
 
         } while (objeto.equals("s"));
