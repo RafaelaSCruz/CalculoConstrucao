@@ -7,7 +7,9 @@ import java.util.Scanner;
 public class SistemaCompleto {
 
     // 3.1-Atributos
-
+    static double finalRevestimento;
+    static double finalObjeto;
+    static double finalArea;
     static Scanner entrada = new Scanner(System.in);
 
     // 3.2-Métodos e Funções
@@ -16,10 +18,11 @@ public class SistemaCompleto {
         // mensagem de saudação e explicação do sistema
         System.out.print("Esse sistema foi feito para calcular a quantidade de revestimento necessario para a sua parede, piso ou superficie.\n" +
                 "Por favor siga os passos abaixo:\n");
+        medidasSuperficie();
 
-        if (medidasSuperficie() > objetos()){
-            escolherRevestimento();
-            calcularQuantidade(); // realiza o cáculo da quantidade de peças do revestimento escolhido
+        if (finalArea > finalObjeto) {
+            escolherRevestimento(); // realiza a escolha do revestimento e o cálculo da quantidade de peças necessárias.
+
         } else {
             System.out.println("Erro: A área dos objetos é maior do que a área da superfície.\n" +
                     "Verifique suas medidas.");
@@ -28,7 +31,7 @@ public class SistemaCompleto {
 
     }
 
-    public static double medidasSuperficie() { // receber informações das medidas do embiente
+    public static void medidasSuperficie() { // receber informações das medidas do embiente
         double largura;
         double comprimento;
 
@@ -39,10 +42,11 @@ public class SistemaCompleto {
         System.out.println("Escreva a COMPRIMENTO em METROS da sua superficie no formato 00,00");
         comprimento = entrada.nextDouble(); // recebe informação 'comprimento' do usuário
 
-        return comprimento * largura; // retorna a área de acordo com as medidas do usuário
+        finalArea = comprimento * largura; // retorna a área de acordo com as medidas do usuário
+        objetos();
     }
 
-    public static double objetos() {// receber informações dos objetos que não devem ser cobertos pelo revestimento
+    public static void objetos() {// receber informações dos objetos que não devem ser cobertos pelo revestimento
         String objeto;
         double larguraObjeto;
         double comprimentoObjeto;
@@ -63,21 +67,23 @@ public class SistemaCompleto {
                 comprimentoObjeto = entrada.nextDouble();
 
                 areaObjeto = (larguraObjeto * comprimentoObjeto);
-                areaTotalObjetos += areaObjeto /10000;
+                areaTotalObjetos += areaObjeto;
             } else if (!objeto.equals("n")) {
                 System.out.println("OPÇÃO INVALIDA! Digite 's' para SIM ou 'n' para NÃO.");
             }
 
         } while (objeto.equals("s"));
-        return areaTotalObjetos;
+
+        finalObjeto = areaTotalObjetos / 10000;
 
     }
 
-    public static double escolherRevestimento() { // escolher a opção de revestimento
+    public static void escolherRevestimento() { // escolher a opção de revestimento
 
         String revestimento;
         double larguraRevestimento = 0;
         double comprimentoRevestimento = 0;
+
 
         System.out.println("Escolha o seu revestimento de acordo com as letras abaixo:\n\n" +
                 "(A) Azulejo branco e preto. 15x15cm\n" +
@@ -110,45 +116,40 @@ public class SistemaCompleto {
                 break;
 
         }
-        return (larguraRevestimento * comprimentoRevestimento) / 100;
+        finalRevestimento = (larguraRevestimento * comprimentoRevestimento) / 100;
+        calcularQuantidade();
     }
 
 
     public static void calcularQuantidade() {// realizar o cálculo
         double calculoTotal;
         String opcao;
-        double areaSuperficie = medidasSuperficie();
-        double areaTotalObjetos = objetos();
-        double opcaoRevestimento = escolherRevestimento();
 
-        calculoTotal = (areaSuperficie - areaTotalObjetos) / opcaoRevestimento;
+        calculoTotal = (finalArea - finalObjeto) / finalRevestimento;
 
-        System.out.println("A quantidade de revestimento necessário para o seu ambiente de " + areaSuperficie + "m² é de " + calculoTotal + "peças.\n");
-        System.out.println("Se deseja escolher outro revestimento digite 'R'\n" +
+        System.out.println("A quantidade de revestimento necessário para o seu ambiente de " + finalArea + "m² é de " + calculoTotal + "peças.\n");
+        System.out.println("Se deseja escolher outro revestimento digite 'R'\n" + // perguntar se deseja realizar novo cálculo
                 "Se deseja realizar um novo cálculo digite 'N'\n" +
                 "Se deseja finalizar seu atendimento digite 'E'\n");
 
         opcao = entrada.next().toUpperCase();
 
-            switch (opcao) {
-                case "R":
-                    escolherRevestimento(); // voltar para escolha de opções
-                    break;
-                case "N":
-                   break; // Não fazer nada aqui para evitar repetir os métodos de entrada
-
-                case "E":
-                    System.out.println("Finalizamos seu atendimento! Obrigado por utilizar o sistema.");
-                    return; // Encerra o método
-                default:
-                    System.out.println("OPÇÃO INVALIDA, ESCOLHA NOVAMENTE!");
-                    break;
-            }
+        switch (opcao) {
+            case "R":
+                escolherRevestimento(); // voltar para escolha de opções de revestimento
+                break;
+            case "N":
+                medidasSuperficie();
+                break; // Não fazer nada aqui para evitar repetir os métodos de entrada
+            case "E":
+                System.out.println("Finalizamos seu atendimento! Obrigado por utilizar o sistema.");
+                return; // Encerra o método
+            default:
+                System.out.println("OPÇÃO INVALIDA, ESCOLHA NOVAMENTE!"); // Mensagem de erro
+                break;
+        }
     }
 
-
-// perguntar se deseja realizar novo cálculo
-// finalizar
 
 }
 
